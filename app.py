@@ -2,6 +2,7 @@ from typing import TypedDict, Annotated, Optional
 from uuid import uuid4
 import json
 
+import os
 from dotenv import load_dotenv
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,6 +16,8 @@ from langgraph.graph import StateGraph, add_messages, END
 from langgraph.prebuilt import ToolNode
 
 load_dotenv()
+
+origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 
 # --- Model and tools ---------------------------------------------------------
 
@@ -65,7 +68,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
